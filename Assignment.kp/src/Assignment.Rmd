@@ -1,0 +1,62 @@
+---
+title: This is a Knowledge Template Header
+authors:
+- sally_smarts
+- wesley_wisdom
+tags:
+- knowledge
+- example
+created_at: 2016-06-29
+updated_at: 2016-06-30
+tldr: This is short description of the content and findings of the post.
+---
+
+**Contents**
+
+
+
+
+```{r}
+library(tidyverse) 
+library(DESeq2)
+
+mycounts <- read_csv("/home/jibin/Documents/Python_Tutorials/Assignment/Exp6_Exp3_Counts_Test.csv") 
+
+metadata <-  read_csv("/home/jibin/Documents/Python_Tutorials/Assignment/Exp6_Exp3_Counts_Test_Metadata.csv") 
+
+mycounts <- as.data.frame(mycounts)
+
+metadata <- as.data.frame(metadata)
+
+names(mycounts)[-1]==metadata$RowNames
+
+all(names(mycounts)[-1]==metadata$RowNames)
+
+dds <- DESeqDataSetFromMatrix(countData=mycounts, 
+                              colData=metadata, 
+                              design=~ Experiment, 
+                              tidy=TRUE)
+
+
+dds <- DESeq(dds)
+
+res <- results(dds, tidy=TRUE)
+
+
+vsdata <- vst(dds, blind=FALSE)
+
+
+plotPCA(vsdata, intgroup="Experiment", ntop=5000)
+
+dev.copy(jpeg,filename="Top_5000.jpg");
+
+ dev.off ()
+
+plotPCA(vsdata, intgroup="Experiment", ntop=500)
+
+dev.copy(jpeg,filename="Top_500.jpg");
+
+ dev.off ()
+
+```
+
